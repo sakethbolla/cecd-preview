@@ -565,7 +565,7 @@ html { scroll-behavior: smooth; }
 	content: '';
 	position: absolute;
 	inset: 0;
-	background-image: url('assets/img/shockwave-bg.svg@v=1.71.0');
+	background-image: url('assets/img/shockwave-bg.svg');
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
