@@ -1,0 +1,68 @@
+/* Self-hosted UMD design-system fonts.
+ *
+ * font-display: swap + preload (in functions.php) + metric-matched fallbacks.
+ *
+ * "swap" tells the browser to render the fallback immediately and swap to the
+ * real Barlow Condensed / Overpass as soon as the woff2 arrives. Combined
+ * with the preload tags in functions.php the swap usually completes before
+ * first paint. When it does not, the real font still renders shortly after,
+ * instead of being skipped entirely for the page (which is what "optional"
+ * did, leading to inconsistent first-visit renders).
+ *
+ * The fallback @font-face entries below define a synthetic family whose
+ * metrics match the real font, so the swap does not shift layout.
+ */
+
+@font-face {
+	font-family: 'Barlow Condensed';
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+	src: url('../fonts/barlow-condensed-700.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'Barlow Condensed';
+	font-style: normal;
+	font-weight: 800;
+	font-display: swap;
+	src: url('../fonts/barlow-condensed-800.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'Barlow Condensed';
+	font-style: italic;
+	font-weight: 800;
+	font-display: swap;
+	src: url('../fonts/barlow-condensed-800-italic.woff2') format('woff2');
+}
+
+@font-face {
+	font-family: 'Overpass';
+	font-style: normal;
+	font-weight: 300 700;
+	font-display: swap;
+	src: url('../fonts/overpass-variable.woff2') format('woff2-variations'),
+	     url('../fonts/overpass-variable.woff2') format('woff2');
+}
+
+/* Metric-matched fallback families — keep layout stable while the real
+ * fonts load. Used in font-family chains as the slot AFTER the real font. */
+@font-face {
+	font-family: 'Barlow Condensed Fallback';
+	src: local('Arial Narrow'), local('Helvetica Neue Condensed'), local('Impact'), local('Arial');
+	font-weight: 400 900;
+	font-style: normal;
+	size-adjust: 88%;
+	ascent-override: 100%;
+	descent-override: 20%;
+	line-gap-override: 0%;
+}
+
+@font-face {
+	font-family: 'Overpass Fallback';
+	src: local('Helvetica Neue'), local('Helvetica'), local('Arial');
+	font-weight: 300 700;
+	font-style: normal;
+	size-adjust: 100%;
+}

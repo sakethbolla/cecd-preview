@@ -1,0 +1,268 @@
+/*
+ * CECD theme, global fluidity layer.
+ *
+ * Adds the micro-interactions the React pilot has but the WP templates
+ * lost in the port. All effects respect prefers-reduced-motion.
+ */
+
+html {
+	scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html { scroll-behavior: auto; }
+}
+
+/* Default link transition, color/border/bg eases everywhere. */
+a, button {
+	transition: color 220ms cubic-bezier(0.4, 0, 0.2, 1),
+	            background-color 220ms cubic-bezier(0.4, 0, 0.2, 1),
+	            border-color 220ms cubic-bezier(0.4, 0, 0.2, 1),
+	            opacity 220ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Lazy images fade in once decoded. */
+img[loading="lazy"]:not([data-cecd-loaded]) {
+	opacity: 0;
+}
+img[loading="lazy"][data-cecd-loaded] {
+	opacity: 1;
+	transition: opacity 320ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reveal-on-scroll for any element tagged data-cecd-reveal. */
+[data-cecd-reveal] {
+	opacity: 0;
+	transform: translateY(14px);
+	transition: opacity 520ms cubic-bezier(0.22, 0.61, 0.36, 1),
+	            transform 520ms cubic-bezier(0.22, 0.61, 0.36, 1);
+	will-change: opacity, transform;
+}
+[data-cecd-reveal].is-revealed {
+	opacity: 1;
+	transform: none;
+}
+
+/* Staggered children, put data-cecd-stagger-child on each card inside a
+ * data-cecd-reveal grid to get a 60ms-cascade fade-up after the parent reveals. */
+[data-cecd-reveal] [data-cecd-stagger-child] {
+	opacity: 0;
+	transform: translateY(10px);
+	transition: opacity 480ms cubic-bezier(0.22, 0.61, 0.36, 1),
+	            transform 480ms cubic-bezier(0.22, 0.61, 0.36, 1);
+	will-change: opacity, transform;
+}
+[data-cecd-reveal].is-revealed [data-cecd-stagger-child]:nth-child(1)  { transition-delay:  60ms; }
+[data-cecd-reveal].is-revealed [data-cecd-stagger-child]:nth-child(2)  { transition-delay: 130ms; }
+[data-cecd-reveal].is-revealed [data-cecd-stagger-child]:nth-child(3)  { transition-delay: 200ms; }
+[data-cecd-reveal].is-revealed [data-cecd-stagger-child]:nth-child(4)  { transition-delay: 270ms; }
+[data-cecd-reveal].is-revealed [data-cecd-stagger-child]:nth-child(5)  { transition-delay: 340ms; }
+[data-cecd-reveal].is-revealed [data-cecd-stagger-child]:nth-child(6)  { transition-delay: 410ms; }
+[data-cecd-reveal].is-revealed [data-cecd-stagger-child]:nth-child(n+7){ transition-delay: 480ms; }
+[data-cecd-reveal].is-revealed [data-cecd-stagger-child] {
+	opacity: 1;
+	transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	[data-cecd-reveal],
+	[data-cecd-reveal] [data-cecd-stagger-child] {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
+}
+
+/* Mobile menu, per-row hover slide + animated red left bar. */
+[data-cecd-mobile-menu] .cecd-mobile-link {
+	position: relative;
+	transition: padding-left 200ms cubic-bezier(0.4, 0, 0.2, 1),
+	            color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+[data-cecd-mobile-menu] .cecd-mobile-link::before {
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 25%;
+	bottom: 25%;
+	width: 0;
+	background: #E21833;
+	transition: width 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+[data-cecd-mobile-menu] .cecd-mobile-link:hover::before,
+[data-cecd-mobile-menu] .cecd-mobile-link:focus-visible::before {
+	width: 3px;
+}
+[data-cecd-mobile-menu] .cecd-mobile-link:hover {
+	color: #E21833;
+}
+
+/* Header dropdown menu, soft fade rather than hard show. */
+[data-cecd-dropdown] [data-cecd-dropdown-menu] {
+	opacity: 0;
+	transform: translateY(-4px);
+	pointer-events: none;
+	transition: opacity 180ms cubic-bezier(0.4, 0, 0.2, 1),
+	            transform 180ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+[data-cecd-dropdown].is-open [data-cecd-dropdown-menu] {
+	opacity: 1;
+	transform: none;
+	pointer-events: auto;
+}
+
+/* Mobile menu, slide down. */
+[data-cecd-mobile-menu] {
+	overflow: hidden;
+	max-height: 0;
+	opacity: 0;
+	transition: max-height 320ms cubic-bezier(0.4, 0, 0.2, 1),
+	            opacity 220ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+[data-cecd-mobile-menu].is-open {
+	max-height: 80vh;
+	opacity: 1;
+}
+
+/* Mobile group children accordion, smooth height/opacity. */
+[data-cecd-mobile-children] {
+	overflow: hidden;
+	max-height: 0;
+	opacity: 0;
+	transition: max-height 280ms cubic-bezier(0.4, 0, 0.2, 1),
+	            opacity 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+[data-cecd-mobile-group].is-open [data-cecd-mobile-children] {
+	max-height: 24rem;
+	opacity: 1;
+}
+[data-cecd-mobile-group][data-cecd-mobile-caret] svg,
+[data-cecd-mobile-group] [data-cecd-mobile-caret] {
+	transition: transform 220ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+[data-cecd-mobile-group].is-open [data-cecd-mobile-caret] {
+	transform: rotate(180deg);
+}
+
+/* Brand-red focus ring, overrides the browser default blue on form fields,
+ * which made the publications toolbar look like a stock PHP form. */
+:focus { outline: none; }
+:focus-visible {
+	outline: 2px solid #E21833;
+	outline-offset: 2px;
+	border-radius: 2px;
+}
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+	outline: none;
+	border-color: #E21833;
+	box-shadow: 0 0 0 3px rgba(226, 24, 51, 0.18);
+}
+
+/* ---------------------------------------------------------------
+ * History page — editorial plaque card + atmospheric backdrops.
+ * Mirrors the React pilot in ~/cecd-umd-website/src/index.css.
+ * --------------------------------------------------------------- */
+
+.cecd-plaque {
+	position: relative;
+	background: #ffffff;
+	box-shadow:
+		0 1px 0 rgba(36, 36, 36, 0.04),
+		0 1px 3px rgba(36, 36, 36, 0.04);
+	transition:
+		transform 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+		box-shadow 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+	will-change: transform;
+}
+.cecd-plaque:hover {
+	transform: translateY(-4px);
+	box-shadow:
+		0 1px 0 rgba(36, 36, 36, 0.06),
+		0 18px 38px -22px rgba(36, 36, 36, 0.30),
+		0 8px 14px -12px rgba(226, 24, 51, 0.18);
+}
+.cecd-plaque .cecd-plaque-rail {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 3px;
+	transform: scaleY(0);
+	transform-origin: top;
+	transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
+	pointer-events: none;
+}
+.cecd-plaque:hover .cecd-plaque-rail {
+	transform: scaleY(1);
+}
+
+/* Timeline canvas — engineering blueprint grid backdrop. */
+.cecd-history-canvas {
+	position: relative;
+	background-color: #FAFAFA;
+	isolation: isolate;
+}
+.cecd-history-canvas::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background-image:
+		linear-gradient(rgba(36, 36, 36, 0.045) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(36, 36, 36, 0.045) 1px, transparent 1px);
+	background-size: 36px 36px;
+	background-position: -1px -1px;
+	-webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 90%, transparent 100%);
+	        mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 90%, transparent 100%);
+	pointer-events: none;
+	z-index: -1;
+}
+.cecd-history-canvas::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background-image:
+		radial-gradient(circle at 90% 10%, rgba(226, 24, 51, 0.05), transparent 45%),
+		radial-gradient(circle at 10% 95%, rgba(255, 210, 0, 0.07), transparent 50%);
+	pointer-events: none;
+	z-index: -1;
+}
+
+/* Dark hero — layered backdrop with red glow + grid + gold scrim + ghost numerals. */
+.cecd-history-hero {
+	position: relative;
+	color: #ffffff;
+	background:
+		radial-gradient(ellipse at 92% -10%, rgba(226, 24, 51, 0.42), transparent 55%),
+		radial-gradient(ellipse at 0% 110%, rgba(255, 210, 0, 0.10), transparent 55%),
+		linear-gradient(180deg, #1b1b1b 0%, #242424 55%, #1d1d1d 100%);
+	overflow: hidden;
+	isolation: isolate;
+}
+.cecd-history-hero::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background-image:
+		linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+	background-size: 48px 48px;
+	-webkit-mask-image: radial-gradient(ellipse at 30% 50%, #000 0%, transparent 80%);
+	        mask-image: radial-gradient(ellipse at 30% 50%, #000 0%, transparent 80%);
+	pointer-events: none;
+	z-index: 0;
+}
+.cecd-history-hero::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background:
+		repeating-linear-gradient(135deg, transparent 0 28px, rgba(255, 255, 255, 0.012) 28px 29px);
+	pointer-events: none;
+	z-index: 0;
+}
+.cecd-history-hero > * {
+	position: relative;
+	z-index: 1;
+}

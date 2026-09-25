@@ -1,0 +1,575 @@
+/*
+Theme Name: CECD UMD
+Theme URI: https://cecd.umd.edu
+Author: CECD / University of Maryland
+Author URI: https://cecd.umd.edu
+Description: WordPress theme for the Center for Engineering Concepts Development (CECD) at the University of Maryland. Ported 1:1 from the React/Vite source.
+Version: 1.71.0
+Requires at least: 6.0
+Requires PHP: 7.4
+License: GNU General Public License v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: cecd
+*/
+
+/* All utility + design-system styles live in assets/css/tailwind.css (compiled once from Tailwind v4 + the UMD @theme). */
+
+/* Theme-level additions not in the compiled bundle. */
+
+/* Override the compiled Tailwind font-family CSS variables so the
+ * metric-matched fallback families declared in assets/css/fonts.css sit
+ * between the real font and the generic family. Without this, Tailwind
+ * utilities like `.font-sans` and the body default still resolve to
+ * `"Overpass", system-ui, ...` and skip the fallback that prevents the
+ * stretchy reflow during font load. style.css is enqueued after
+ * tailwind.css so this override wins. */
+:root {
+	--font-display: 'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif;
+	--font-sans:    'Overpass', 'Overpass Fallback', system-ui, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+/* === UMD design system typography baseline ===
+   Per https://designsystem.umd.edu/foundation/typography:
+   - Barlow Condensed: display & headings (heroes, stats, component headers).
+   - Overpass: body, UI, captions, labels (free alternative to Interstate).
+   `:where()` keeps specificity at 0 so existing classes (.umd-display, .umd-headline,
+   .cecd-nav-link, etc.) always win. This is just a safety net for raw / Gutenberg-
+   authored content so nothing falls back to a system font. */
+:where(h1, h2, h3, h4, h5, h6) {
+	font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif;
+	font-weight: 700;
+	line-height: 1.1;
+	letter-spacing: 0.01em;
+}
+:where(button, input, select, textarea, label, legend) {
+	font-family: 'Overpass', 'Overpass Fallback', system-ui, sans-serif;
+}
+
+/* Site nav, translucent white with backdrop blur + soft shadow + thin gradient accent. */
+.cecd-navbar {
+	background: rgba(255, 255, 255, 0.94);
+	-webkit-backdrop-filter: saturate(180%) blur(10px);
+	backdrop-filter: saturate(180%) blur(10px);
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+	transition:
+		background-color 0.4s cubic-bezier(.4,0,.2,1),
+		box-shadow 0.4s cubic-bezier(.4,0,.2,1),
+		border-color 0.4s cubic-bezier(.4,0,.2,1);
+}
+.cecd-navbar > div { position: relative; z-index: 1; }
+
+/* ============================================================
+ * Overlay navbar — nav fused into the hero.
+ * Pages that open with a dark hero get .cecd-navbar--overlay:
+ * the bar starts fully transparent over the hero image (white
+ * links, white logo, soft scrim for legibility) and morphs into
+ * the standard white blurred bar once the hero scrolls past.
+ * JS (main.js initNavState) toggles .is-scrolled / .is-menu-open.
+ * ============================================================ */
+
+/* Soft top scrim so white links stay readable over bright image areas.
+ * Lives on the nav so it fades out together with the transparent state. */
+.cecd-navbar--overlay::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: -32px;
+	background: linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.30) 55%, rgba(0,0,0,0) 100%);
+	pointer-events: none;
+	transition: opacity 0.4s cubic-bezier(.4,0,.2,1);
+}
+.cecd-navbar--overlay.is-scrolled::before,
+.cecd-navbar--overlay.is-menu-open::before { opacity: 0; }
+
+/* Transparent state (top of a hero page, mobile menu closed). */
+.cecd-navbar--overlay:not(.is-scrolled):not(.is-menu-open) {
+	background: transparent;
+	-webkit-backdrop-filter: none;
+	backdrop-filter: none;
+	box-shadow: none;
+	border-bottom-color: transparent;
+}
+.cecd-navbar--overlay:not(.is-scrolled):not(.is-menu-open) .cecd-nav-link { color: #FFFFFF; }
+.cecd-navbar--overlay:not(.is-scrolled):not(.is-menu-open) .cecd-nav-link:hover { color: #FFD200; }
+.cecd-navbar--overlay:not(.is-scrolled):not(.is-menu-open) .cecd-nav-link.is-active { color: #FFD200; }
+.cecd-navbar--overlay:not(.is-scrolled):not(.is-menu-open) .cecd-nav-link.is-active::after { background: #FFD200; }
+.cecd-navbar--overlay:not(.is-scrolled):not(.is-menu-open) [data-cecd-mobile-toggle] { color: #FFFFFF; }
+
+/* Logo cross-fade: the brand logo lives on an opaque white background, so it
+ * can't sit on the transparent bar directly. Two stacked imgs swap by opacity:
+ * the on-dark lockup over the hero, the standard logo once the bar goes solid. */
+.cecd-navbar__brand { position: relative; }
+.cecd-navbar__logo { transition: opacity 0.4s cubic-bezier(.4,0,.2,1); }
+.cecd-navbar__logo--ondark {
+	position: absolute;
+	top: 0;
+	left: 0;
+	opacity: 0;
+	pointer-events: none;
+}
+.cecd-navbar--overlay:not(.is-scrolled):not(.is-menu-open) .cecd-navbar__logo { opacity: 0; }
+.cecd-navbar--overlay:not(.is-scrolled):not(.is-menu-open) .cecd-navbar__logo--ondark { opacity: 1; }
+
+/* Pull the page up under the sticky bar so the hero image reaches the very
+ * top of the viewport, then hand the 80px back to the hero as padding so its
+ * content keeps the same optical position. */
+.cecd-main--under-nav { margin-top: -80px; }
+.cecd-main--under-nav > section:first-of-type { padding-top: 80px; }
+
+/* History hero stamp sits 28px from the section top; under the overlay nav
+ * that lands behind the bar, so push it below the nav band. */
+.cecd-main--under-nav .cecd-history-hero__stamp { top: 96px; }
+@media (min-width: 1024px) {
+	.cecd-main--under-nav .cecd-history-hero__stamp { top: 104px; }
+}
+
+/* === Primary nav links, UMD design system: Barlow Condensed, uppercase, bold. === */
+.cecd-nav-link {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 28px 14px;
+	font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif;
+	font-size: 16px;
+	font-weight: 500;
+	font-style: italic;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: #242424;
+	white-space: nowrap;
+	transition: color 0.25s cubic-bezier(.4,0,.2,1);
+}
+.cecd-mobile-link {
+	font-style: italic;
+}
+.cecd-nav-link::after {
+	content: "";
+	position: absolute;
+	left: 50%;
+	bottom: 0;
+	height: 3px;
+	width: 0;
+	background: linear-gradient(90deg, #E21833, #FFD200);
+	transform: translateX(-50%);
+	transition: width 0.3s cubic-bezier(.4,0,.2,1);
+	z-index: 1;
+}
+.cecd-nav-link:hover { color: #E21833; }
+.cecd-nav-link:hover::after,
+[data-cecd-dropdown]:hover > .cecd-nav-link::after { width: calc(100% - 14px); }
+.cecd-nav-link.is-active { color: #E21833; }
+.cecd-nav-link.is-active::after {
+	width: calc(100% - 14px);
+	background: #E21833;
+}
+.cecd-nav-link svg { transition: transform 0.25s ease; }
+.cecd-nav-link:hover svg,
+[data-cecd-dropdown]:hover .cecd-nav-link svg { transform: translateY(2px); }
+
+/* Dropdown panel, fade + slide in on hover. Panels carry .hidden in markup; :hover animates the rest. */
+[data-cecd-dropdown-menu] {
+	opacity: 0;
+	transform: translateY(-8px);
+	transition: opacity 0.2s ease, transform 0.2s ease;
+}
+[data-cecd-dropdown]:hover [data-cecd-dropdown-menu]:not(.hidden) {
+	opacity: 1;
+	transform: translateY(0);
+}
+[data-cecd-dropdown-menu] a {
+	position: relative;
+	border-left: 3px solid transparent;
+	transition: padding-left 0.2s ease, color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+[data-cecd-dropdown-menu] a:hover {
+	border-left-color: #E21833;
+	padding-left: 28px;
+}
+
+/* Mobile menu, accordion + 3px red bar indicator (matches desktop dropdown). */
+.cecd-mobile-group { border-bottom: 1px solid #e5e5e5; }
+.cecd-mobile-group:last-child { border-bottom: 0; }
+.cecd-mobile-link {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	padding: 14px 18px 14px 21px;
+	font-size: 14px;
+	font-weight: 700;
+	color: #1a1a1a;
+	background: transparent;
+	border-left: 3px solid transparent;
+	text-align: left;
+	transition: padding-left 0.2s ease, color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+.cecd-mobile-link:hover,
+.cecd-mobile-link:focus { padding-left: 28px; }
+.cecd-mobile-child:hover,
+.cecd-mobile-child:focus { padding-left: 44px; }
+.cecd-mobile-link:hover,
+.cecd-mobile-link:focus,
+[data-cecd-mobile-group].is-open > .cecd-mobile-toggle {
+	border-left-color: #E21833;
+	color: #E21833;
+	background: #fafafa;
+}
+.cecd-mobile-toggle { cursor: pointer; }
+[data-cecd-mobile-group].is-open [data-cecd-mobile-caret] { transform: rotate(180deg); }
+.cecd-mobile-children { background: #fafafa; padding: 4px 0 8px; }
+.cecd-mobile-child {
+	padding: 10px 18px 10px 36px;
+	font-size: 13px;
+	font-weight: 500;
+	color: #4a4a4a;
+}
+.cecd-mobile-child:hover,
+.cecd-mobile-child:focus {
+	background: #f0f0f0;
+	color: #E21833;
+	border-left-color: #E21833;
+}
+.cecd-mobile-overview { font-style: italic; color: #6a6a6a; }
+.cecd-mobile-contact { color: #E21833; }
+
+/* Hide the horizontal scrollbar on the history timeline, auto-scroll + hover do the work. */
+.timeline-scroll { scrollbar-width: none; -ms-overflow-style: none; }
+.timeline-scroll::-webkit-scrollbar { width: 0; height: 0; display: none; }
+
+/* === Ultra-wide monitor adjustments ===
+   Most layout containers are .max-w-[1440px]. On 1800px+ screens the content
+   feels lost in a fixed 1440 box, and the hero typography reads small relative
+   to the viewport. Scale both fluidly so the design breathes on big monitors. */
+@media (min-width: 1800px) {
+	.max-w-\[1440px\] { max-width: clamp(1440px, 78vw, 2200px); }
+	h1.umd-display { font-size: clamp(4.5rem, 5.4vw, 8rem); line-height: 0.95; }
+	h2.umd-display { font-size: clamp(3rem, 4vw, 6rem); line-height: 1; }
+	.umd-display.text-4xl,
+	.umd-display.text-5xl { font-size: clamp(3rem, 4vw, 6rem); }
+	.text-lg { font-size: clamp(1.125rem, 1.1vw, 1.5rem); }
+	.max-w-2xl { max-width: clamp(42rem, 38vw, 56rem); }
+}
+@media (min-width: 2400px) {
+	.max-w-\[1440px\] { max-width: clamp(2000px, 78vw, 2600px); }
+}
+
+/* Site-wide: umd-display defaults to italic in the compiled bundle. Override to
+ * upright so display headings match the hero title's style. */
+.umd-display { font-style: normal; }
+
+/* Page titles (hero h1s) opt back into the italic slant for forward-leaning
+ * tone, per Dylan's feedback. Override the upright reset above. */
+.cecd-page-title { font-style: italic !important; }
+
+/* Timeline animated reveal (controlled by main.js via .is-visible) */
+.cecd-tl-dot { width: 8px; height: 8px; transition: none; cursor: pointer; }
+.cecd-tl-dot.is-visible { width: 16px; height: 16px; transition: width 0.12s ease-out, height 0.12s ease-out; }
+.cecd-tl-dot.is-hovered { transform: scale(1.3); transition: transform 0.12s ease-out; }
+
+.cecd-tl-year { opacity: 0; transform: translateY(4px); transition: none; }
+.cecd-tl-year.is-visible { opacity: 1; transform: none; transition: opacity 0.12s ease, transform 0.12s ease; }
+
+.cecd-tl-card { opacity: 0; transform: translateY(14px); transition: none; }
+.cecd-tl-card.is-visible {
+	opacity: 1;
+	transform: translateY(0);
+	transition:
+		opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+		transform 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+		box-shadow 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* Dot-driven hover synced via main.js — keep same look as native :hover. */
+.cecd-tl-card.is-hovered {
+	transform: translateY(-4px);
+	box-shadow:
+		0 1px 0 rgba(36, 36, 36, 0.06),
+		0 18px 38px -22px rgba(36, 36, 36, 0.30),
+		0 8px 14px -12px rgba(226, 24, 51, 0.18);
+}
+.cecd-tl-card.is-hovered .cecd-plaque-rail { transform: scaleY(1); }
+.cecd-tl-card.is-hovered::before,
+.cecd-tl-card.is-hovered::after { border-color: rgba(36, 36, 36, 0.28); }
+
+/* Mobile: scroll-driven reveal observer is desktop-only, so show cards immediately. */
+@media (max-width: 767px) {
+	.cecd-tl-card { opacity: 1; transform: none; }
+}
+
+/* ============================================================
+ * Tailwind utility shims — classes referenced by templates but
+ * not present in the compiled assets/css/tailwind.css. Adding
+ * them here avoids re-running the React build pipeline. Keep
+ * scope tight; only add what's actually consumed.
+ * ============================================================ */
+.h-px  { height: 1px; }
+.space-y-2 > * + * { margin-top: 0.5rem; }
+.w-12  { width: 3rem; }
+.w-24  { width: 6rem; }
+.mt-14 { margin-top: 3.5rem; }
+.mb-7  { margin-bottom: 1.75rem; }
+.py-24 { padding-top: 6rem; padding-bottom: 6rem; }
+.text-white\/40 { color: rgba(255, 255, 255, 0.4); }
+.tracking-\[0\.2em\] { letter-spacing: 0.2em; }
+@media (min-width: 1024px) {
+	.lg\:py-36 { padding-top: 9rem; padding-bottom: 9rem; }
+}
+
+/* ============================================================
+ * History hero — cinematic image variant (matches React pilot)
+ * Activated by the `cecd-history-hero` class added in render.php
+ * when the hero block uses variant="history".
+ * ============================================================ */
+.cecd-history-hero {
+	position: relative;
+	overflow: hidden;
+	isolation: isolate;
+	background:
+		radial-gradient(ellipse at 92% -10%, rgba(226, 24, 51, 0.42), transparent 55%),
+		radial-gradient(ellipse at 0% 110%, rgba(255, 210, 0, 0.10), transparent 55%),
+		linear-gradient(180deg, #1b1b1b 0%, #242424 55%, #1d1d1d 100%);
+}
+/* Subtle grid pattern fading out across the hero. */
+.cecd-history-hero::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background-image:
+		linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+	background-size: 48px 48px;
+	-webkit-mask-image: radial-gradient(ellipse at 30% 50%, #000 0%, transparent 80%);
+	        mask-image: radial-gradient(ellipse at 30% 50%, #000 0%, transparent 80%);
+	pointer-events: none;
+	z-index: 0;
+}
+/* Hairline diagonal stripes for texture — barely perceptible. */
+.cecd-history-hero::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: repeating-linear-gradient(135deg, transparent 0 28px, rgba(255, 255, 255, 0.012) 28px 29px);
+	pointer-events: none;
+	z-index: 0;
+}
+/* Image-backed variant — kicks in only when an author explicitly picks a backdrop.
+   Suppresses the grid + stripes (the image already carries texture). */
+.cecd-history-hero--image { background: #0d0d0d; }
+.cecd-history-hero--image::before,
+.cecd-history-hero--image::after { content: none; }
+.cecd-history-hero__media {
+	position: absolute;
+	inset: 0;
+	background-size: cover;
+	background-position: center;
+	filter: contrast(1.05) saturate(1.05);
+	z-index: 0;
+	animation: cecd-hero-zoom 18s ease-out forwards;
+}
+@keyframes cecd-hero-zoom {
+	from { transform: scale(1.06); }
+	to   { transform: scale(1); }
+}
+.cecd-history-hero__scrim {
+	position: absolute;
+	inset: 0;
+	background:
+		radial-gradient(ellipse at 22% 55%, rgba(0,0,0,0.40) 0%, rgba(0,0,0,0.30) 40%, rgba(0,0,0,0.05) 80%, transparent 100%),
+		linear-gradient(180deg, rgba(0,0,0,0.18) 0%, transparent 35%, transparent 75%, rgba(0,0,0,0.35) 100%);
+	z-index: 1;
+}
+/* History timeline: hide the year labels under each dot on the rail —
+   the cards above/below already carry the year, so the inline labels
+   read as visual noise on the red bar. Desktop only; the mobile
+   vertical timeline doesn't use cecd-tl-year. */
+.cecd-tl-year { display: none; }
+/* Stamp sits at top-left of the hero, horizontal, aligned with content padding. */
+.cecd-history-hero__stamp {
+	position: absolute;
+	top: 28px;
+	left: 24px;
+	font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', system-ui, sans-serif;
+	font-weight: 700;
+	font-style: italic;
+	text-transform: uppercase;
+	font-size: 11px;
+	letter-spacing: 0.42em;
+	color: rgba(255, 255, 255, 0.55);
+	white-space: nowrap;
+	pointer-events: none;
+	z-index: 2;
+}
+@media (min-width: 1024px) {
+	.cecd-history-hero__stamp { left: 40px; top: 32px; }
+}
+
+/* ============================================================
+ * Story cards — 3-up image-tinted CTA tiles ("Where the story continues")
+ * Used by the cecd/story-cards block.
+ * ============================================================ */
+.cecd-story-tile {
+	position: relative;
+	display: block;
+	aspect-ratio: 4 / 3;
+	overflow: hidden;
+	background: #1a1a1a;
+	transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.cecd-story-tile:hover { transform: translateY(-4px); }
+.cecd-story-tile__img {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.7s ease-out;
+}
+.cecd-story-tile:hover .cecd-story-tile__img { transform: scale(1.05); }
+.cecd-story-tile__veil {
+	position: absolute;
+	inset: 0;
+	background:
+		linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.45) 50%, rgba(0,0,0,0.88) 100%);
+	pointer-events: none;
+}
+.cecd-story-tile__body {
+	position: absolute;
+	left: 24px;
+	right: 24px;
+	bottom: 24px;
+	color: #fff;
+}
+.cecd-story-tile__title {
+	font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', system-ui, sans-serif;
+	font-weight: 700;
+	font-style: italic;
+	text-transform: uppercase;
+	letter-spacing: 0.01em;
+	font-size: clamp(20px, 2vw, 26px);
+	transition: color 0.3s ease;
+}
+.cecd-story-tile:hover .cecd-story-tile__title { color: #FFD200; }
+.cecd-story-tile__copy {
+	color: rgba(255,255,255,0.72);
+	font-size: 14px;
+	font-weight: 300;
+	line-height: 1.45;
+	margin-top: 8px;
+	max-width: 30ch;
+}
+.cecd-story-tile__open {
+	margin-top: 16px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+.cecd-story-tile__open-label {
+	font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', system-ui, sans-serif;
+	font-weight: 700;
+	text-transform: uppercase;
+	color: #FFD200;
+	font-size: 10px;
+	letter-spacing: 0.3em;
+}
+.cecd-story-tile__open-rule {
+	display: inline-block;
+	height: 1px;
+	width: 32px;
+	background: #FFD200;
+	transition: width 0.3s ease;
+}
+.cecd-story-tile:hover .cecd-story-tile__open-rule { width: 64px; }
+
+/* === Sub-page spacing primitives ===
+   Tailwind's compiled bundle only contains a thin slice of spacing utilities
+   (no space-y-*, no lg:mb-20+, no gap-10/16, no pb-12+, no lg:pb-*). These
+   classes fill the gaps so partnership-style sub-pages can breathe. Used
+   on Government / Industry / Academia and any future sub-page that stacks
+   narrative blocks with shared chrome. */
+
+/* Stack of narrative blocks with generous vertical gaps. */
+.cecd-stack > * + * { margin-top: 80px; }
+@media (min-width: 1024px) { .cecd-stack > * + * { margin-top: 112px; } }
+
+/* Each narrative block: bottom padding + thin separator. Last item drops the
+   separator and zeroes its bottom space so the section padding takes over. */
+.cecd-stack-item { padding-bottom: 80px; border-bottom: 1px solid #E5E5E5; }
+@media (min-width: 1024px) { .cecd-stack-item { padding-bottom: 112px; } }
+.cecd-stack-item:last-child { padding-bottom: 0; border-bottom: 0; }
+
+/* Paragraph rhythm inside a narrative block. Sibling paragraphs get 24px
+   between them so prose doesn't read as a single solid wall. */
+.cecd-prose > p + p { margin-top: 24px; }
+.cecd-prose > p + .cecd-prose-list,
+.cecd-prose > .cecd-prose-list + p { margin-top: 32px; }
+
+/* Section-header to first-block gap (replaces broken lg:mb-20). */
+/* People page: leadership keeps its full top pad but sits closer to the
+   founders section; founders runs compact above and below. Plain CSS because
+   the purged Tailwind build lacks these spacing utilities. */
+.cecd-people-lead-pad { padding-top: 80px; padding-bottom: 40px; }
+@media (min-width: 1024px) { .cecd-people-lead-pad { padding-top: 112px; padding-bottom: 48px; } }
+.cecd-people-founders-pad { padding-top: 40px; padding-bottom: 40px; }
+@media (min-width: 1024px) { .cecd-people-founders-pad { padding-top: 48px; padding-bottom: 48px; } }
+
+.cecd-section-intro { margin-bottom: 80px; }
+@media (min-width: 1024px) { .cecd-section-intro { margin-bottom: 112px; } }
+
+/* Two-column hero/grid gap (replaces broken gap-10 / lg:gap-16). */
+.cecd-2col { display: grid; gap: 48px; }
+@media (min-width: 1024px) {
+	.cecd-2col { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 80px; }
+}
+
+/* Breadcrumb on dark hero. Standardized so every sub-page reads the same.
+   Used by cecd_breadcrumb() in functions.php. */
+.cecd-breadcrumb {
+	margin-bottom: 28px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	font-family: 'Barlow Condensed', 'Barlow Condensed Fallback', sans-serif;
+	font-weight: 700;
+	font-size: 14px;
+	letter-spacing: 0.28em;
+	text-transform: uppercase;
+	color: rgba(255, 255, 255, 0.55);
+}
+.cecd-breadcrumb a {
+	color: inherit;
+	text-decoration: none;
+	transition: color 0.25s ease;
+}
+.cecd-breadcrumb a:hover { color: #FFFFFF; }
+.cecd-breadcrumb .cecd-breadcrumb__sep { color: rgba(255, 255, 255, 0.3); }
+.cecd-breadcrumb .cecd-breadcrumb__current { color: #FFFFFF; }
+
+/* Presenter / symposia table row spacing (py-7/8/10 not compiled). */
+.cecd-row { padding-top: 28px; padding-bottom: 28px; }
+@media (min-width: 1024px) { .cecd-row { padding-top: 36px; padding-bottom: 36px; } }
+
+/* space-y-* replacements (Tailwind compiled bundle has none of them). */
+.cecd-stack-y-6 > * + * { margin-top: 24px; }
+
+/* Shockwave background overlay on Symposia rows 3 (#autonomy) and 5 (#ncres).
+ * Matches the shockwave overlay already on row 1 (seeded inline) so the three
+ * white rows share the same texture, with the alternating lightest-gray rows
+ * staying plain. Opacity 0.45 matches the row-1 inline value. */
+.cecd-symposia-list > section#autonomy::before,
+.cecd-symposia-list > section#ncres::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background-image: url('assets/img/shockwave-bg.svg@v=1.71.0');
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	opacity: 0.45;
+	pointer-events: none;
+	z-index: 0;
+}
