@@ -236,3 +236,16 @@ a.mk-card:hover{border-color:var(--mk-red);transform:translateY(-2px)}
 .mk-place{padding:32px;border:1px solid var(--mk-line);background:#fff}
 .mk-source{font-size:12px;color:var(--mk-mid);margin-top:10px;display:block}
 .mk-card__src{display:block;font-size:12px;color:var(--mk-red);margin-top:10px;font-family:var(--mk-display);font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+
+/* ===== placeholder mode ===== */
+.mk-ref{background:#FFF7CC;border-bottom:1px solid #E8D98A;color:#3a3000;font-size:13px;position:relative;z-index:5}
+.cecd-main--under-nav .mk-ref{padding-top:80px;background:#FFF7CC}
+.mk-ref__in{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline;padding-top:10px;padding-bottom:10px}
+.mk-ref__k{font-family:var(--mk-display);font-weight:700;text-transform:uppercase;letter-spacing:.18em;font-size:11px}
+.mk-ref__src{font-weight:700}
+.mk-ref__url{color:#8a6d00;text-decoration:underline;word-break:break-all}
+.mk-ref__keep{flex-basis:100%;color:#5a4a00}
+.cecd-main--under-nav > .mk-ref + section{padding-top:0!important}
+mark.ph,.ph{background:transparent;color:inherit;opacity:.78;outline:1px dashed currentColor;outline-offset:3px;border-radius:2px;padding:0 2px}
+.mk-hero mark.ph,.mk-photo-hero mark.ph,.mk-bleed mark.ph,.mk-sec--ink mark.ph,.mk-sec--black mark.ph,.mk-sec--red mark.ph,.mk-callout mark.ph,.mk-band mark.ph{color:inherit}
+.mk-card__ref{display:block;font-size:11px;color:var(--mk-mid);margin-top:4px;word-break:break-all}
