@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" width="100%" height="100%">
+  <!--
+    Shockwave bg: two origin dots (top-left + bottom-right). Each origin has
+    a halo of static concentric rings so the wave pattern reads instantly,
+    plus staggered animated wavefronts that expand outward and fade slowly.
+    Tuned to be clearly legible on white at full opacity (front page) while
+    staying quiet at the 0.45 used by cecd_shockwave_overlay() on sub-pages.
+  -->
+
+  <!-- ===== Origin A: top-left ===== -->
+  <!-- static halo: always-visible concentric rings -->
+  <g stroke="#8F8F8F" fill="none" stroke-width="1.25">
+    <circle cx="70" cy="70" r="34"  opacity="0.55"/>
+    <circle cx="70" cy="70" r="62"  opacity="0.42"/>
+    <circle cx="70" cy="70" r="96"  opacity="0.30"/>
+    <circle cx="70" cy="70" r="136" opacity="0.20"/>
+    <circle cx="70" cy="70" r="182" opacity="0.12"/>
+  </g>
+  <!-- animated wavefronts -->
+  <g stroke="#8F8F8F" fill="none" stroke-width="1.25">
+    <circle cx="70" cy="70" r="20"><animate attributeName="r" values="20;1400" dur="12s" repeatCount="indefinite" begin="0s"/><animate attributeName="opacity" values="0.6;0.35;0" keyTimes="0;0.4;1" dur="12s" repeatCount="indefinite" begin="0s"/></circle>
+    <circle cx="70" cy="70" r="20"><animate attributeName="r" values="20;1400" dur="12s" repeatCount="indefinite" begin="2s"/><animate attributeName="opacity" values="0.6;0.35;0" keyTimes="0;0.4;1" dur="12s" repeatCount="indefinite" begin="2s"/></circle>
+    <circle cx="70" cy="70" r="20"><animate attributeName="r" values="20;1400" dur="12s" repeatCount="indefinite" begin="4s"/><animate attributeName="opacity" values="0.6;0.35;0" keyTimes="0;0.4;1" dur="12s" repeatCount="indefinite" begin="4s"/></circle>
+    <circle cx="70" cy="70" r="20"><animate attributeName="r" values="20;1400" dur="12s" repeatCount="indefinite" begin="6s"/><animate attributeName="opacity" values="0.6;0.35;0" keyTimes="0;0.4;1" dur="12s" repeatCount="indefinite" begin="6s"/></circle>
+    <circle cx="70" cy="70" r="20"><animate attributeName="r" values="20;1400" dur="12s" repeatCount="indefinite" begin="8s"/><animate attributeName="opacity" values="0.6;0.35;0" keyTimes="0;0.4;1" dur="12s" repeatCount="indefinite" begin="8s"/></circle>
+    <circle cx="70" cy="70" r="20"><animate attributeName="r" values="20;1400" dur="12s" repeatCount="indefinite" begin="10s"/><animate attributeName="opacity" values="0.6;0.35;0" keyTimes="0;0.4;1" dur="12s" repeatCount="indefinite" begin="10s"/></circle>
+  </g>
+  <!-- leading edge: one red-tinted wavefront per cycle ties the wave to the dot -->
+  <g stroke="#E21833" fill="none" stroke-width="1.25">
+    <circle cx="70" cy="70" r="20"><animate attributeName="r" values="20;1400" dur="12s" repeatCount="indefinite" begin="0s"/><animate attributeName="opacity" values="0.28;0.14;0" keyTimes="0;0.4;1" dur="12s" repeatCount="indefinite" begin="0s"/></circle>
+  </g>
+
+  <!-- ===== Origin B: bottom-right ===== -->
+  <!-- static halo -->
+  <g stroke="#8F8F8F" fill="none" stroke-width="1.25">
+    <circle cx="1530" cy="830" r="34"  opacity="0.55"/>
+    <circle cx="1530" cy="830" r="62"  opacity="0.42"/>
+    <circle cx="1530" cy="830" r="96"  opacity="0.30"/>
+    <circle cx="1530" cy="830" r="136" opacity="0.20"/>
+    <circle cx="1530" cy="830" r="182" opacity="0.12"/>
+  </g>
+  <!-- animated wavefronts -->
+  <g stroke="#8F8F8F" fill="none" stroke-width="1.25">
+    <circle cx="1530" cy="830" r="20"><animate attributeName="r" values="20;1400" dur="12s" repeatCount="indefinite" begin="1s"/><animate attributeName="opacity" values="0.6;0.35;0" keyTimes="0;0.4;1" dur="12s" repeatCount="indefinite" begin="1s"/></circle>
+    <circle cx="1530" cy="830" r="20"><animate attributeName="r" values="20;1400" dur="12s" repeatCount="indefinite" begin="3s"/><animate attributeName="opacity" values="0.6;0.35;0" keyTimes="0;0.4;1" dur="12s" repeatCount="indefinite" begin="3s"/></circle>
+    <circle cx="1530" cy="830" r="20"><animate attributeName="r" values="20;1400" dur="12s" repeatCount="indefinite" begin="5s"/><animate attributeName="opacity" values="0.6;0.35;0" keyTimes="0;0.4;1" dur="12s" repeatCount="indefinite" begin="5s"/></circle>
+    <circle cx="1530" cy="830" r="20"><animate attributeName="r" values="20;1400" dur="12s" repeatCount="indefinite" begin="7s"/><animate attributeName="opacity" values="0.6;0.35;0" keyTimes="0;0.4;1" dur="12s" repeatCount="indefinite" begin="7s"/></circle>
+    <circle cx="1530" cy="830" r="20"><animate attributeName="r" values="20;1400" dur="12s" repeatCount="indefinite" begin="9s"/><animate attributeName="opacity" values="0.6;0.35;0" keyTimes="0;0.4;1" dur="12s" repeatCount="indefinite" begin="9s"/></circle>
+    <circle cx="1530" cy="830" r="20"><animate attributeName="r" values="20;1400" dur="12s" repeatCount="indefinite" begin="11s"/><animate attributeName="opacity" values="0.6;0.35;0" keyTimes="0;0.4;1" dur="12s" repeatCount="indefinite" begin="11s"/></circle>
+  </g>
+  <!-- leading edge -->
+  <g stroke="#E21833" fill="none" stroke-width="1.25">
+    <circle cx="1530" cy="830" r="20"><animate attributeName="r" values="20;1400" dur="12s" repeatCount="indefinite" begin="1s"/><animate attributeName="opacity" values="0.28;0.14;0" keyTimes="0;0.4;1" dur="12s" repeatCount="indefinite" begin="1s"/></circle>
+  </g>
+
+  <!-- ===== Pulsing red dot markers at each origin ===== -->
+  <g fill="#E21833">
+    <circle cx="70" cy="70" r="6">
+      <animate attributeName="r" values="6;9;6" dur="2.4s" repeatCount="indefinite" begin="0s"/>
+      <animate attributeName="opacity" values="1;0.55;1" dur="2.4s" repeatCount="indefinite" begin="0s"/>
+    </circle>
+    <circle cx="1530" cy="830" r="6">
+      <animate attributeName="r" values="6;9;6" dur="2.4s" repeatCount="indefinite" begin="1.2s"/>
+      <animate attributeName="opacity" values="1;0.55;1" dur="2.4s" repeatCount="indefinite" begin="1.2s"/>
+    </circle>
+  </g>
+</svg>

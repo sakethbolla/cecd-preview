@@ -1,0 +1,42 @@
+/*
+ * CECD theme, cross-document View Transitions.
+ *
+ * Opts the whole site into native browser-driven transitions between
+ * full page loads. Browsers without support ignore these rules and
+ * navigate normally, no polyfill, no plugin.
+ */
+
+@view-transition {
+	navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation-duration: 220ms;
+	animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+::view-transition-old(root) {
+	animation-name: cecd-fade-out;
+}
+
+::view-transition-new(root) {
+	animation-name: cecd-fade-in;
+}
+
+@keyframes cecd-fade-out {
+	from { opacity: 1; transform: translateY(0); }
+	to   { opacity: 0; transform: translateY(-4px); }
+}
+
+@keyframes cecd-fade-in {
+	from { opacity: 0; transform: translateY(6px); }
+	to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	::view-transition-old(root),
+	::view-transition-new(root) {
+		animation: none;
+	}
+}
