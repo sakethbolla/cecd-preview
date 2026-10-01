@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex, nofollow" />
 <link rel="icon" type="image/png" sizes="32x32" href="theme/assets/img/favicon-32.png" />
 <meta name="theme-color" content="#E21833" />
-<title>Purpose with alternating rows · Mission &amp; Vision mockup 04 · CECD</title>
+<title>Photo hero, pull quote, approach · Mission &amp; Vision mockup 01 · CECD</title>
 <link rel="preload" as="font" type="font/woff2" crossorigin href="theme/assets/fonts/barlow-condensed-700.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="theme/assets/fonts/barlow-condensed-800.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="theme/assets/fonts/barlow-condensed-800-italic.woff2" />
@@ -21,7 +21,7 @@
 <body class="page wp-theme-cecd-umd-wordpress min-h-screen flex flex-col">
 
 
-<nav class="sticky top-0 z-50 cecd-navbar">
+<nav class="sticky top-0 z-50 cecd-navbar cecd-navbar--overlay">
 	<div class="max-w-[1440px] mx-auto px-6 lg:px-10">
 		<div class="flex items-center justify-between" style="height:80px;">
 
@@ -182,30 +182,42 @@
 (function(){var n=document.querySelector('.cecd-navbar--overlay');if(n&&window.scrollY>64){n.classList.add('is-scrolled');}})();
 </script>
 
-<main class="flex-1">
-<section class="mk-hero-light">
-  <div class="mk-wrap">
-    <p class="mk-eyebrow">The Center</p>
-    <h1 class="mk-tagline mk-tagline--up" style="font-size:clamp(40px,6vw,92px)">Engineering with <span class="mk-accent">a purpose.</span></h1>
-    <p class="mk-lead mk-max-4" style="margin-top:28px">CECD is a platform for experimenting with new ideas in engineering education, future technologies, and research, and it puts those ideas to work through research and symposia.</p>
+<main class="flex-1 cecd-main--under-nav">
+<section class="mk-photo-hero">
+  <div class="mk-photo-hero__img" style="background-image:url(theme/assets/img/blueprint-hands-hero.webp)"></div>
+  <div class="mk-photo-hero__scrim"></div>
+  <div class="mk-wrap mk-photo-hero__in">
+    <p class="mk-quote mk-quote--serif mk-max-4" style="color:#fff">"A platform for experimenting with new ideas in engineering education, future technologies, and research."</p>
   </div>
 </section>
 
-<section class="mk-sec--white" style="padding:16px 0 48px">
-  <div class="mk-wrap">
-    <div class="mk-alt">
-      <div><p class="mk-eyebrow">What we do</p><p class="mk-lead" style="margin-bottom:16px"><b>Research on emerging ideas in energetics and engineering,</b> conducted with federal sponsors and faculty across the University.</p><p class="mk-body">The Center works across the energetics enterprise and the engineering disciplines that intersect with it. Results return to sponsors, appear in the open literature, and are shared at the Center's symposia.</p></div>
-      <div class="mk-ratio"><img class="mk-img" src="theme/assets/img/lab-hero.webp" alt=""></div>
-    </div>
-    <div class="mk-alt mk-alt--flip">
-      <div><p class="mk-eyebrow">Our people</p><p class="mk-lead" style="margin-bottom:16px"><b>Faculty, graduate students, and partner scientists,</b> brought together around shared problems.</p><p class="mk-body">Students are trained inside sponsored research. Working professionals from partner organizations take short courses and graduate programs that grew out of the Center.</p></div>
-      <div class="mk-ratio"><img class="mk-img" src="theme/assets/img/blueprint-hands-hero.webp" alt=""></div>
-    </div>
-    <div class="mk-alt">
-      <div><p class="mk-eyebrow">Where we are going</p><p class="mk-lead" style="margin-bottom:16px"><b>A national resource for the science and manufacturing of energetic materials,</b> and for the people who work in the field.</p><p class="mk-body">The problems have changed since 1998. The purpose has not.</p><a class="mk-link" href="#" style="display:inline-block;margin-top:16px">History &amp; timeline</a></div>
-      <div class="mk-ratio"><img class="mk-img" src="theme/assets/img/blueprints-hero.webp" alt=""></div>
+<section class="mk-sec mk-sec--white">
+  <div class="mk-wrap mk-grid mk-grid--12">
+    <div class="mk-span-8 mk-start-2 mk-stack">
+      <h1 class="mk-headline" style="font-size:32px">The Center for Engineering Concepts Development</h1>
+      <p class="mk-lead">CECD conducts research on emerging ideas in energetics and engineering and brings the results to the academic, industry, and government partners who can use them. It was established in 1998 in the Department of Mechanical Engineering at the University of Maryland, through a cooperative agreement with the Naval Surface Warfare Center Indian Head Division.</p>
+      <p class="mk-body">The Center works with federal sponsors, national laboratories, industry, and partner universities. Results are published in the open literature and presented at the Center's symposia.</p>
     </div>
   </div>
+</section>
+
+<section class="mk-sec mk-sec--paper">
+  <div class="mk-wrap mk-grid mk-grid--12">
+    <div class="mk-span-8 mk-start-2">
+      <h2 class="mk-headline" style="font-size:28px;margin-bottom:24px">Our approach</h2>
+      <ul class="mk-bullets">
+        <li>Sponsors bring problems; faculty bring expertise; the Center brings them together.</li>
+        <li>Graduate students are trained inside sponsored research, not alongside it.</li>
+        <li>Findings go back to sponsors and into the open literature.</li>
+        <li>Symposia and published books bring the field together around questions of current interest.</li>
+        <li>Partnerships are sustained over years, through successive agreements.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="mk-sec--white" style="padding:0 0 80px">
+  <div class="mk-wrap"><div class="mk-rail"><a href="#">People</a><a href="#">History &amp; timeline</a><a href="#">Research areas</a><a href="#">Workforce development</a><a href="#">Partnerships</a><a href="#">Contact</a></div></div>
 </section>
 </main>
 
@@ -249,8 +261,8 @@
 
 <div class="mk-bar" role="navigation" aria-label="Mockup navigation">
 <a class="mk-bar__idx" href="index.html">All mockups</a>
-<span class="mk-bar__t">04 / 15 &nbsp;Purpose with alternating rows &middot; after Lawrence Livermore National Laboratory, Purpose</span>
-<a href="03-beckman.html" aria-label="Previous">&larr;</a><a href="05-srnl.html" aria-label="Next">&rarr;</a>
+<span class="mk-bar__t">01 / 15 &nbsp;Photo hero, pull quote, approach &middot; after The New School, Mission and Vision</span>
+<a href="index.html" aria-label="Previous">&larr;</a><a href="02-poster.html" aria-label="Next">&rarr;</a>
 </div><script src="theme/assets/js/main.js"></script>
 <script src="theme/assets/js/nav-fx.js"></script>
 </body>
