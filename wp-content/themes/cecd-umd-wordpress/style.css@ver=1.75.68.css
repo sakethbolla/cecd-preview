@@ -555,6 +555,7 @@ html { scroll-behavior: smooth; }
 
 /* space-y-* replacements (Tailwind compiled bundle has none of them). */
 .cecd-stack-y-6 > * + * { margin-top: 24px; }
+.cecd-stack-y-4 > * + * { margin-top: 16px; }
 
 /* Shockwave background overlay on Symposia rows 3 (#autonomy) and 5 (#ncres).
  * Matches the shockwave overlay already on row 1 (seeded inline) so the three
