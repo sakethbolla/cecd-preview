@@ -205,6 +205,14 @@ textarea:focus-visible {
 	flex-direction: column;
 	gap: 20px;
 	max-width: 1080px;
+	margin-left: auto;
+	margin-right: auto;
+}
+/* Section heading lines up with the centered rows. */
+.cecd-section-intro.cecd-plaque-rows-intro {
+	max-width: 1080px;
+	margin-left: auto;
+	margin-right: auto;
 }
 .cecd-plaque-row {
 	display: grid;
