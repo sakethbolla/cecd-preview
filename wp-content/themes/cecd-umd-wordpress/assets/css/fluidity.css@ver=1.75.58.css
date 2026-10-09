@@ -203,7 +203,7 @@ textarea:focus-visible {
 .cecd-plaque-rows {
 	display: flex;
 	flex-direction: column;
-	gap: 32px;
+	gap: 20px;
 }
 .cecd-plaque-row {
 	display: grid;
@@ -212,17 +212,17 @@ textarea:focus-visible {
 	align-items: stretch;
 }
 @media (min-width: 768px) {
-	.cecd-plaque-row { grid-template-columns: 5fr 7fr; }
+	.cecd-plaque-row { grid-template-columns: 240px 1fr; }
 }
 .cecd-plaque-row__img {
 	position: relative;
 	margin: 0;
 	overflow: hidden;
 	background: #242424;
-	aspect-ratio: 16 / 10;
+	aspect-ratio: 16 / 6;
 }
 @media (min-width: 768px) {
-	.cecd-plaque-row__img { aspect-ratio: auto; min-height: 260px; }
+	.cecd-plaque-row__img { aspect-ratio: auto; min-height: 0; }
 }
 .cecd-plaque-row__img img {
 	position: absolute;
