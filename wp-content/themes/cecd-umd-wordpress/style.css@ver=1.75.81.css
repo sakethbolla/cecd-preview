@@ -525,6 +525,10 @@ html { scroll-behavior: smooth; }
 @media (min-width: 1024px) {
 	.cecd-2col { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 80px; }
 }
+/* Single centered reading column (split-section gridLayout "cecd-1col"):
+   the empty left rail collapses and the text sits at a readable width. */
+.cecd-1col { max-width: 880px; margin-left: auto; margin-right: auto; }
+.cecd-1col > .lg\:col-span-5:not(:has(*)) { display: none; }
 
 /* Breadcrumb on dark hero. Standardized so every sub-page reads the same.
    Used by cecd_breadcrumb() in functions.php. */
