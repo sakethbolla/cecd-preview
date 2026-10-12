@@ -221,14 +221,14 @@ textarea:focus-visible {
 	align-items: stretch;
 }
 @media (min-width: 768px) {
-	.cecd-plaque-row { grid-template-columns: 240px 1fr; }
+	.cecd-plaque-row { grid-template-columns: minmax(0, 3fr) minmax(0, 7fr); }
 }
 .cecd-plaque-row__img {
 	position: relative;
 	margin: 0;
 	overflow: hidden;
 	background: #242424;
-	aspect-ratio: 16 / 6;
+	aspect-ratio: 16 / 9;
 }
 @media (min-width: 768px) {
 	.cecd-plaque-row__img { aspect-ratio: auto; min-height: 0; }
@@ -316,3 +316,7 @@ textarea:focus-visible {
 	position: relative;
 	z-index: 1;
 }
+
+/* split-section padHalf: half of py-20 lg:py-28 */
+.cecd-pad-half { padding-top: 40px; padding-bottom: 40px; }
+@media (min-width: 1024px) { .cecd-pad-half { padding-top: 56px; padding-bottom: 56px; } }
