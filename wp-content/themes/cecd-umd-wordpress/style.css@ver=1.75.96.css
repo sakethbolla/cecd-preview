@@ -519,6 +519,11 @@ html { scroll-behavior: smooth; }
 
 .cecd-section-intro { margin-bottom: 80px; }
 @media (min-width: 1024px) { .cecd-section-intro { margin-bottom: 112px; } }
+/* "Tight" block setting: half the section padding and the heading-to-content gap. */
+.cecd-tight-pad { padding-top: 40px; padding-bottom: 40px; }
+@media (min-width: 1024px) { .cecd-tight-pad { padding-top: 56px; padding-bottom: 56px; } }
+.cecd-tight-pad .cecd-section-intro { margin-bottom: 40px; }
+@media (min-width: 1024px) { .cecd-tight-pad .cecd-section-intro { margin-bottom: 56px; } }
 
 /* Two-column hero/grid gap (replaces broken gap-10 / lg:gap-16). */
 .cecd-2col { display: grid; gap: 48px; }
